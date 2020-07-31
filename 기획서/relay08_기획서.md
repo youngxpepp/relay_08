@@ -26,7 +26,7 @@
 
 ------
 
-![system](.\img\system.png)
+![system](./img/system.png)
 
 
 
@@ -87,7 +87,7 @@
 
 ---
 
-![board](.\img\board.png)
+![board](./img/board.png)
 
 게시판 예시
 
