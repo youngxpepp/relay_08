@@ -29,6 +29,8 @@
     (\*server 및 back-end 미존재)
   - `papaparse` 이용 .csv 로딩
 
+https://www.notion.so/week2-Relay-08-e933c71e08e743398b39cce20305d3c0
+
 ## Python Docker 설정 부분
 
 ### pull&run image
