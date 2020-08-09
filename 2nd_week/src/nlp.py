@@ -1,6 +1,12 @@
 import pandas as pd
 import re
 from krwordrank.word import KRWordRank
+import os, sys
+
+cur_dir = os.path.dirname(os.path.abspath( __file__ ))
+os.chdir(cur_dir)
+os.chdir('..')
+os.chdir('./public')
 
 sentence_pattern = re.compile('\n+|[.?!]')
 
@@ -26,4 +32,4 @@ for i, row in enumerate(split_data):
         print(f'[fail] index: {i}, len: {len(row)}')
         df._set_value(i, 'tagList', '')
 
-df.to_csv('./tag_contents.csv', index=False)
+df.to_csv('./tag_contents.csv', encoding='utf8', index=False)
