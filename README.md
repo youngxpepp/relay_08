@@ -37,4 +37,4 @@
     J202*차효준
     J203*최기환
 
-[2주차 프로젝트 링크](https://github.com/boostcamp-2020/relay_08/blob/master/2nd_week/README.md)
+[2주차 프로젝트 링크](https://github.com/boostcamp-2020/relay_08/blob/master/2nd_week/WEEK_2.md)
