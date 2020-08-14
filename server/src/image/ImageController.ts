@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Injectable } from "@nestjs/common";
+import { Controller, Post, Body, Injectable, UsePipes, ValidationPipe } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ImageDto } from "@src/image/Image.dto";
+import { ImageControllerDto } from "@src/image/Image.dto";
 import { Image } from "@src/image/Image";
 
 interface StatusResponse {
@@ -17,11 +17,16 @@ export class ImageController {
     ) {}
 
     @Post("/upload")
-    public async uploadImages(@Body() image: ImageDto): Promise<StatusResponse> {
-        const entity: Image = new Image();
-        entity.image = image.image;
-        await this.imagesRepository.save(entity);
-
+    @UsePipes(new ValidationPipe({ transform: true }))
+    // public async uploadImages(@Body() image: ImageDto): Promise<StatusResponse> {
+    public async uploadImages(
+        @Body() requestDto: ImageControllerDto.ImageDto
+    ): Promise<StatusResponse> {
+        // const entity: Image = new Image();
+        // entity.image = image;
+        // await this.imagesRepository.save(entity);
+        // const value = requestDto.getImage();
+        console.log(requestDto.getImage());
         return {
             status: "OK"
         };
