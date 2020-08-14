@@ -19,8 +19,6 @@ export class ImageController {
         entity.image = requestDto.getImage();
 
         const idValue = await this.imagesRepository.save(entity);
-        console.log(idValue.imageId);
-
         return idValue.imageId;
     }
 }
