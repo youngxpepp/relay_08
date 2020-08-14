@@ -2,6 +2,7 @@ import { Controller, Injectable, Post, Body, UsePipes, ValidationPipe } from "@n
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "@src/user/User";
 import { Repository, Connection } from "typeorm";
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
 import { UserControllerDto } from "./UserControllerDto";
 
 @Controller("/users")
@@ -15,6 +16,8 @@ export class UserController {
 
     @Post("/signup")
     @UsePipes(new ValidationPipe({ transform: true }))
+    @ApiBody({ type: UserControllerDto.SignUpRequestDto })
+    @ApiResponse({ type: UserControllerDto.SignUpResponseDto })
     async signUp(
         @Body() requestDto: UserControllerDto.SignUpRequestDto
     ): Promise<UserControllerDto.SignUpResponseDto> {

@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
 
+import { ApiProperty, ApiResponseProperty } from "@nestjs/swagger";
+
 export namespace UserControllerDto {
     export class SignUpRequestDto {
+        @ApiProperty()
         private name: string;
 
+        @ApiProperty()
         private nickname: string;
 
         constructor(name: string, nickname: string) {
@@ -22,10 +26,13 @@ export namespace UserControllerDto {
     }
 
     export class SignUpResponseDto {
+        @ApiResponseProperty()
         private id: number;
 
+        @ApiResponseProperty()
         private name: string;
 
+        @ApiResponseProperty()
         private nickname: string;
 
         constructor(id: number, name: string, nickname: string) {
