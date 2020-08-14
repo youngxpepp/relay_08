@@ -5,7 +5,7 @@ services:
     container_name: relay08mysql
     restart: always
     ports:
-      - 3307:3306
+      - 3306:3306
     environment:
       MYSQL_DATABASE: "relay08db"
       MYSQL_USER: "relay08user"

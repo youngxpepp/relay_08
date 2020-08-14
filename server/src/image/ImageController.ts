@@ -18,15 +18,12 @@ export class ImageController {
 
     @Post("/upload")
     @UsePipes(new ValidationPipe({ transform: true }))
-    // public async uploadImages(@Body() image: ImageDto): Promise<StatusResponse> {
     public async uploadImages(
         @Body() requestDto: ImageControllerDto.ImageDto
     ): Promise<StatusResponse> {
-        // const entity: Image = new Image();
-        // entity.image = image;
-        // await this.imagesRepository.save(entity);
-        // const value = requestDto.getImage();
-        console.log(requestDto.getImage());
+        const entity: Image = new Image();
+        entity.image = requestDto.getImage();
+        await this.imagesRepository.save(entity);
         return {
             status: "OK"
         };
