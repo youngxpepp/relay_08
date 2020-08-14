@@ -14,11 +14,11 @@ export class ImageController {
 
     @Post("/upload")
     @UsePipes(new ValidationPipe({ transform: true }))
-    public async uploadImages(@Body() requestDto: ImageControllerDto.ImageDto): Promise<Number> {
+    public async uploadImages(@Body() requestDto: ImageControllerDto.ImageDto): Promise<Image> {
         const entity: Image = new Image();
         entity.image = requestDto.getImage();
 
         const idValue = await this.imagesRepository.save(entity);
-        return idValue.imageId;
+        return idValue;
     }
 }
