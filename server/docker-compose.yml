@@ -1,0 +1,22 @@
+version: "3"
+services:
+  relay08mysql:
+    image: mysql:5.7
+    container_name: relay08mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: "relay08db"
+      MYSQL_USER: "relay08user"
+      MYSQL_PASSWORD: "123123"
+      MYSQL_ROOT_PASSWORD: "123123"
+    command: 
+      - --default-authentication-plugin=mysql_native_password 
+      - --character-set-server=utf8 
+      - --collation-server=utf8_unicode_ci
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - 8888:8080
