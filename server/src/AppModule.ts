@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { User } from "@src/user/User";
 import { Image } from "@src/image/Image";
 import { UserController } from "./user/UserController";
+import { ImageController } from "./image/ImageController";
 
 @Module({
     imports: [
@@ -24,7 +25,7 @@ import { UserController } from "./user/UserController";
         TypeOrmModule.forFeature([User, Image]),
         ConfigModule.forRoot()
     ],
-    controllers: [UserController],
+    controllers: [UserController, ImageController],
     providers: []
 })
 export class AppModule {}
