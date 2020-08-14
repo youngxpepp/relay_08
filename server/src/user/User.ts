@@ -14,4 +14,9 @@ export class User {
     @OneToOne(() => Image)
     @JoinColumn({ name: "image_id" })
     image!: Image;
+
+    constructor(name: string, nickname: string) {
+        this.name = name;
+        this.nickname = nickname;
+    }
 }
