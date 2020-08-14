@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Image } from "@src/image/Image";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -10,4 +10,8 @@ export class User {
 
     @Column({ name: "name" })
     name!: string;
+
+    @OneToOne(() => Image)
+    @JoinColumn({ name: "image_id" })
+    image!: Image;
 }

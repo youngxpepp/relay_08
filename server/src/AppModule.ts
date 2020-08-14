@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { User } from "@src/user/User";
+import { Image } from "@src/image/Image";
 import { UserController } from "./user/UserController";
 
 @Module({
@@ -15,12 +16,12 @@ import { UserController } from "./user/UserController";
                 username: configService.get("DATABASE_USERNAME"),
                 password: configService.get("DATABASE_PASSWORD"),
                 database: configService.get("DATABASE_NAME"),
-                entities: [User],
+                entities: [User, Image],
                 synchronize: true
             }),
             inject: [ConfigService]
         }),
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([User, Image]),
         ConfigModule.forRoot()
     ],
     controllers: [UserController],
