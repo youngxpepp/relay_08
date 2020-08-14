@@ -1,4 +1,4 @@
-import { Controller, Injectable, Post, Body } from "@nestjs/common";
+import { Controller, Injectable, Post, Body, UsePipes, ValidationPipe } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "@src/user/User";
 import { Repository, Connection } from "typeorm";
@@ -14,12 +14,13 @@ export class UserController {
     ) {}
 
     @Post("/signup")
+    @UsePipes(new ValidationPipe({ transform: true }))
     async signUp(
         @Body() requestDto: UserControllerDto.SignUpRequestDto
     ): Promise<UserControllerDto.SignUpResponseDto> {
         const existedUser: User | undefined = await this.usersRepository.findOne({
             where: {
-                nickname: requestDto.nickname
+                nickname: requestDto.getNickname()
             }
         });
 
@@ -28,7 +29,7 @@ export class UserController {
         }
 
         const user = await this.usersRepository.save(
-            new User(requestDto.name, requestDto.nickname)
+            new User(requestDto.getName(), requestDto.getNickname())
         );
 
         return new UserControllerDto.SignUpResponseDto(user.id, user.name, user.nickname);

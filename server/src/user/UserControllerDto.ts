@@ -3,9 +3,22 @@
 
 export namespace UserControllerDto {
     export class SignUpRequestDto {
-        name!: string;
+        private name: string;
 
-        nickname!: string;
+        private nickname: string;
+
+        constructor(name: string, nickname: string) {
+            this.name = name;
+            this.nickname = nickname;
+        }
+
+        public getName(): string {
+            return this.name;
+        }
+
+        public getNickname(): string {
+            return this.nickname;
+        }
     }
 
     export class SignUpResponseDto {
