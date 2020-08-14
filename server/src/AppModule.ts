@@ -5,6 +5,7 @@ import { User } from "@src/user/User";
 import { Image } from "@src/image/Image";
 import { UserController } from "./user/UserController";
 import { ImageController } from "./image/ImageController";
+import { AnalysisController } from "./analysis/AnalysisController";
 
 @Module({
     imports: [
@@ -25,7 +26,7 @@ import { ImageController } from "./image/ImageController";
         TypeOrmModule.forFeature([User, Image]),
         ConfigModule.forRoot()
     ],
-    controllers: [UserController, ImageController],
+    controllers: [UserController, ImageController, AnalysisController],
     providers: []
 })
 export class AppModule {}
