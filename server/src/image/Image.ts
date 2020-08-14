@@ -5,6 +5,6 @@ export class Image {
     @PrimaryGeneratedColumn()
     imageId!: number;
 
-    @Column({ type: "blob", name: "image" })
+    @Column({ type: "longblob", name: "image" })
     image!: string;
 }
