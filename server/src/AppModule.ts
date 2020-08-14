@@ -5,6 +5,7 @@ import { User } from "@src/user/User";
 import { Image } from "@src/image/Image";
 import { UserController } from "./user/UserController";
 import { ImageController } from "./image/ImageController";
+import { TransformInterceptor } from "./common/interceptor/TransformInterceptor";
 
 @Module({
     imports: [
@@ -26,6 +27,6 @@ import { ImageController } from "./image/ImageController";
         ConfigModule.forRoot()
     ],
     controllers: [UserController, ImageController],
-    providers: []
+    providers: [TransformInterceptor]
 })
 export class AppModule {}
