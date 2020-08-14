@@ -1,34 +1,36 @@
-import { Controller, Get, Injectable } from "@nestjs/common";
+import { Controller, Injectable, Post, Body } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "@src/user/User";
-import { Repository } from "typeorm";
-
-interface TestResponse {
-    id: number;
-    password: number;
-}
+import { Repository, Connection } from "typeorm";
+import { UserControllerDto } from "./UserControllerDto";
 
 @Controller("/users")
 @Injectable()
 export class UserController {
     constructor(
         @InjectRepository(User)
-        private usersRepository: Repository<User>
+        private usersRepository: Repository<User>,
+        private connection: Connection
     ) {}
 
-    @Get("/test4")
-    async test(): Promise<TestResponse> {
-        const user: User | undefined = await this.usersRepository.findOne(1);
-        console.log(user);
+    @Post("/signup")
+    async signUp(
+        @Body() requestDto: UserControllerDto.SignUpRequestDto
+    ): Promise<UserControllerDto.SignUpResponseDto> {
+        const existedUser: User | undefined = await this.usersRepository.findOne({
+            where: {
+                nickname: requestDto.nickname
+            }
+        });
 
-        return {
-            id: 123,
-            password: 56
-        };
-    }
+        if (existedUser !== undefined) {
+            throw new Error("해당 닉네임을 가진 사용자가 이미 존재합니다.");
+        }
 
-    @Get("/test")
-    helloWorld(): string {
-        return "hello world";
+        const user = await this.usersRepository.save(
+            new User(requestDto.name, requestDto.nickname)
+        );
+
+        return new UserControllerDto.SignUpResponseDto(user.id, user.name, user.nickname);
     }
 }
