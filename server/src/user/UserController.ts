@@ -1,6 +1,5 @@
 import {
     Controller,
-    Injectable,
     Post,
     Body,
     UsePipes,
@@ -18,7 +17,6 @@ import { Image } from "@src/image/Image";
 import { UserControllerDto } from "./UserControllerDto";
 
 @Controller("/users")
-@Injectable()
 export class UserController {
     constructor(
         @InjectRepository(User)

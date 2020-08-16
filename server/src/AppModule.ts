@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, HttpModule } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { User } from "@src/user/User";
@@ -6,6 +6,8 @@ import { Image } from "@src/image/Image";
 import { UserController } from "./user/UserController";
 import { ImageController } from "./image/ImageController";
 import { TransformInterceptor } from "./common/interceptor/TransformInterceptor";
+import { AIController } from "./ai/AIController";
+import { CompareFacesService } from "./ai/CompareFacesService";
 
 @Module({
     imports: [
@@ -24,9 +26,10 @@ import { TransformInterceptor } from "./common/interceptor/TransformInterceptor"
             inject: [ConfigService]
         }),
         TypeOrmModule.forFeature([User, Image]),
-        ConfigModule.forRoot()
+        ConfigModule.forRoot(),
+        HttpModule
     ],
-    controllers: [UserController, ImageController],
-    providers: [TransformInterceptor]
+    controllers: [UserController, ImageController, AIController],
+    providers: [TransformInterceptor, CompareFacesService]
 })
 export class AppModule {}

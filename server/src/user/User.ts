@@ -11,7 +11,7 @@ export class User {
     @Column({ name: "name" })
     name!: string;
 
-    @OneToOne(() => Image)
+    @OneToOne(() => Image, { eager: true })
     @JoinColumn({ name: "image_id" })
     image!: Image;
 

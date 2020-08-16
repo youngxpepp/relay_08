@@ -36,15 +36,18 @@ export class ImageController {
         const pngImageArr = requestDto.getImage().split("data:image/png;base64,");
 
         if (jpegImageArr.length === 2) {
-            image.image = jpegImageArr[1];
+            image.image = Buffer.from(jpegImageArr[1], "base64");
         } else if (pngImageArr.length === 2) {
-            image.image = pngImageArr[1];
+            image.image = Buffer.from(pngImageArr[1], "base64");
         } else {
             throw new BadRequestException("이미지는 PNG 또는 JPEG 형식이어야 합니다.");
         }
 
         await this.imagesRepository.save(image);
 
-        return new ImageControllerDto.UploadImagesResponseDto(image.imageId, image.image);
+        return new ImageControllerDto.UploadImagesResponseDto(
+            image.imageId,
+            image.image.toString("base64")
+        );
     }
 }

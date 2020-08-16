@@ -6,5 +6,5 @@ export class Image {
     imageId!: number;
 
     @Column({ type: "longblob", name: "image" })
-    image!: string;
+    image!: Buffer;
 }
