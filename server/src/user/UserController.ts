@@ -5,13 +5,16 @@ import {
     Body,
     UsePipes,
     ValidationPipe,
-    UseInterceptors
+    UseInterceptors,
+    NotFoundException,
+    BadRequestException
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "@src/user/User";
-import { Repository, Connection } from "typeorm";
+import { Repository } from "typeorm";
 import { ApiBody, ApiResponse } from "@nestjs/swagger";
 import { TransformInterceptor } from "@src/common/interceptor/TransformInterceptor";
+import { Image } from "@src/image/Image";
 import { UserControllerDto } from "./UserControllerDto";
 
 @Controller("/users")
@@ -20,8 +23,8 @@ export class UserController {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
-        private connection: Connection,
-        private transformInterceptor: TransformInterceptor
+        @InjectRepository(Image)
+        private imageRepository: Repository<Image>
     ) {}
 
     @Post("/signup")
@@ -32,19 +35,34 @@ export class UserController {
     async signUp(
         @Body() requestDto: UserControllerDto.SignUpRequestDto
     ): Promise<UserControllerDto.SignUpResponseDto> {
-        const existedUser: User | undefined = await this.usersRepository.findOne({
-            where: {
-                nickname: requestDto.getNickname()
-            }
-        });
+        const [existedUser, existedImage]: [
+            User | undefined,
+            Image | undefined
+        ] = await Promise.all([
+            this.usersRepository.findOne({
+                where: {
+                    nickname: requestDto.getNickname()
+                }
+            }),
+            this.imageRepository.findOne({
+                where: {
+                    imageId: requestDto.getImageId()
+                }
+            })
+        ]);
 
         if (existedUser !== undefined) {
-            throw new Error("해당 닉네임을 가진 사용자가 이미 존재합니다.");
+            throw new BadRequestException("해당 닉네임을 가진 사용자가 이미 존재합니다.");
         }
 
-        const user = await this.usersRepository.save(
-            new User(requestDto.getName(), requestDto.getNickname())
-        );
+        if (existedImage === undefined) {
+            throw new NotFoundException("해당 아이디를 가진 이미지가 존재하지 않습니다.");
+        }
+
+        const user = new User(requestDto.getName(), requestDto.getNickname());
+        user.image = existedImage;
+
+        await this.usersRepository.save(user);
 
         return new UserControllerDto.SignUpResponseDto(user.id, user.name, user.nickname);
     }

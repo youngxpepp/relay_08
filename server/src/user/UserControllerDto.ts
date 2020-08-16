@@ -29,6 +29,10 @@ export namespace UserControllerDto {
         public getNickname(): string {
             return this.nickname;
         }
+
+        public getImageId(): number {
+            return this.imageId;
+        }
     }
 
     export class SignUpResponseDto {
