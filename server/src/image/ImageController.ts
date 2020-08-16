@@ -4,10 +4,6 @@ import { Repository } from "typeorm";
 import { ImageControllerDto } from "@src/image/Image.dto";
 import { Image } from "@src/image/Image";
 
-interface StatusResponse {
-    status: string;
-}
-
 @Controller("/images")
 @Injectable()
 export class ImageController {
@@ -18,14 +14,11 @@ export class ImageController {
 
     @Post("/upload")
     @UsePipes(new ValidationPipe({ transform: true }))
-    public async uploadImages(
-        @Body() requestDto: ImageControllerDto.ImageDto
-    ): Promise<StatusResponse> {
+    public async uploadImages(@Body() requestDto: ImageControllerDto.ImageDto): Promise<Image> {
         const entity: Image = new Image();
         entity.image = requestDto.getImage();
-        await this.imagesRepository.save(entity);
-        return {
-            status: "OK"
-        };
+
+        const idValue = await this.imagesRepository.save(entity);
+        return idValue;
     }
 }
