@@ -28,6 +28,7 @@
     "rules": {
         "prettier/prettier": "error",
         "import/prefer-default-export": "off",
-        "class-methods-use-this": "off"
+        "class-methods-use-this": "off",
+        "prefer-destructuring": "off"
     }
 }

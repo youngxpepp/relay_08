@@ -1,8 +1,19 @@
-import { Controller, Post, Body, Injectable, UsePipes, ValidationPipe } from "@nestjs/common";
+import {
+    Controller,
+    Post,
+    Body,
+    Injectable,
+    UsePipes,
+    ValidationPipe,
+    UseInterceptors,
+    BadRequestException
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ImageControllerDto } from "@src/image/Image.dto";
+import { ImageControllerDto } from "@src/image/ImageControllerDto";
 import { Image } from "@src/image/Image";
+import { TransformInterceptor } from "@src/common/interceptor/TransformInterceptor";
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
 
 @Controller("/images")
 @Injectable()
@@ -14,11 +25,26 @@ export class ImageController {
 
     @Post("/upload")
     @UsePipes(new ValidationPipe({ transform: true }))
-    public async uploadImages(@Body() requestDto: ImageControllerDto.ImageDto): Promise<Image> {
-        const entity: Image = new Image();
-        entity.image = requestDto.getImage();
+    @UseInterceptors(new TransformInterceptor())
+    @ApiBody({ type: ImageControllerDto.UploadImagesRequestDto })
+    @ApiResponse({ type: ImageControllerDto.UploadImagesResponseDto })
+    public async uploadImages(
+        @Body() requestDto: ImageControllerDto.UploadImagesRequestDto
+    ): Promise<ImageControllerDto.UploadImagesResponseDto> {
+        const image = new Image();
+        const jpegImageArr = requestDto.getImage().split("data:image/jpeg;base64,");
+        const pngImageArr = requestDto.getImage().split("data:image/png;base64,");
 
-        const idValue = await this.imagesRepository.save(entity);
-        return idValue;
+        if (jpegImageArr.length === 2) {
+            image.image = jpegImageArr[1];
+        } else if (pngImageArr.length === 2) {
+            image.image = pngImageArr[1];
+        } else {
+            throw new BadRequestException("이미지는 PNG 또는 JPEG 형식이어야 합니다.");
+        }
+
+        await this.imagesRepository.save(image);
+
+        return new ImageControllerDto.UploadImagesResponseDto(image.imageId, image.image);
     }
 }
